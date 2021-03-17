@@ -65,7 +65,7 @@ class NetUtil {
       (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (client) {
         client.findProxy = (uri) {
-          return "PROXY $NetConfig.proxyIp:$NetConfig.proxyPort";
+          return "PROXY ${NetConfig.proxyIp}:${NetConfig.proxyPort}";
         };
         //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
         client.badCertificateCallback =
@@ -81,12 +81,18 @@ class NetUtil {
   /// [sendTimeout] 发送超时赶时间
   /// [receiveTimeout] 接收超时赶时间
   /// [interceptors] 基础拦截器
+  /// [proxyEnable] 是否开启代理
+  /// [proxyIp] 代理ip
+  /// [proxyPort] 代理端口
   void init({
     required String baseUrl,
     int? connectTimeout,
     int? sendTimeout,
     int? receiveTimeout,
     List<Interceptor>? interceptors,
+    bool proxyEnable = true,
+    String proxyIp = '192.168.2.237',
+    String proxyPort = '8888',
   }) {
     //初始化默认参数
     dio.options.baseUrl = baseUrl;
@@ -98,6 +104,11 @@ class NetUtil {
     if (interceptors != null && interceptors.isNotEmpty) {
       dio.interceptors.addAll(interceptors);
     }
+
+    //处理代理
+    NetConfig.proxyEnable = proxyEnable;
+    NetConfig.proxyIp = proxyIp;
+    NetConfig.proxyPort = proxyPort;
   }
 
   /// Get 操作
