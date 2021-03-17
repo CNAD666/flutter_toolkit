@@ -26,7 +26,7 @@ class AppException implements Exception {
         return BadRequestException(-1, "响应超时");
       case DioErrorType.response:
         try {
-          int errCode = error?.response?.statusCode ?? -1;
+          int errCode = error.response?.statusCode ?? -1;
           // String errMsg = error.response.statusMessage;
           // return ErrorEntity(code: errCode, message: errMsg);
           switch (errCode) {
@@ -51,7 +51,7 @@ class AppException implements Exception {
             default:
               // return ErrorEntity(code: errCode, message: "未知错误");
               return AppException(
-                  errCode, error?.response?.statusMessage ?? '未知错误');
+                  errCode, error.response?.statusMessage ?? '未知错误');
           }
         } on Exception catch (_) {
           return AppException(-1, "未知错误");
