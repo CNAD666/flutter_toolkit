@@ -1,8 +1,9 @@
-name: flutter_toolkit
-description: flutter工具包.
+name: flutter_toolkit_easy
+description: flutter工具包
 version: 0.0.1
-author:
-homepage:
+author: xdd666
+homepage: https://github.com/CNAD666
+publish_to: https://pub.dartlang.org
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
