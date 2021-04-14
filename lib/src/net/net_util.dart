@@ -24,13 +24,13 @@ enum HttpMethod {
 class NetUtil {
   static NetUtil? _instance;
 
-  static NetUtil? get instance => _getInstance();
+  static NetUtil get instance => _getInstance();
 
-  static NetUtil? _getInstance() {
+  static NetUtil _getInstance() {
     if (_instance == null) {
       _instance = NetUtil._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   Dio dio = Dio();
