@@ -6,7 +6,7 @@ class NetConfig {
   NetConfig._();
 
   /// 是否启用代理 代理服务IP 代理服务端口
-  static bool proxyEnable = true;
+  static bool proxyEnable = false;
   static String proxyIp = '';
   static String proxyPort = '';
 
@@ -27,7 +27,4 @@ class NetConfig {
   // static const cacheEnable = true;
   // static const cacheMaxAge = 1000;
   // static const cacheMaxCount = 100;
-
-  /// token
-  static String accessToken = "";
 }

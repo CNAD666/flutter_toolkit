@@ -50,7 +50,7 @@ class NetUtil {
         NetConfig.headerContentType: NetConfig.contentTypeForm,
       },
       // 设置内容类型为“multipart/form-data”
-      contentType: NetConfig.contentTypeForm,
+      // contentType: NetConfig.contentTypeForm,
     );
 
     // 添加拦截器
@@ -208,7 +208,6 @@ class NetUtil {
     }
     //处理请求设置
     options = options ?? Options();
-    options.headers = getAuthorizationHeader();
 
     var response = await dio.request(
       path,
@@ -233,13 +232,5 @@ class NetUtil {
   /// 所以参数可选
   void cancelRequests({CancelToken? token}) {
     token ?? _cancelToken.cancel("cancelled");
-  }
-
-  /// 读取本地配置
-  Map<String, dynamic> getAuthorizationHeader() {
-    var headers;
-    String accessToken = NetConfig.accessToken;
-    headers = {"Authorization": 'Bearer $accessToken'};
-    return headers;
   }
 }

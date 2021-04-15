@@ -17,21 +17,22 @@ class TestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     test();
 
-    return Container(
-      color: Colors.white,
-      child: Text('测试', style: TextStyle(fontSize: 300)),
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Text('测试', style: TextStyle(fontSize: 50, color: Colors.black)),
+      ),
     );
   }
 }
 
 void test() async {
   Log.d('测试Http');
-  var query = {'return': 'json'};
 
-  NetUtil.instance.init(baseUrl: 'https://api.ixiaowai.cn/');
   var result = await NetUtil.instance.get(
-    'api/api.php',
-    queryParameters: query,
+    'https://www.wanandroid.com/banner/json',
   );
+
   Log.i(result);
 }
