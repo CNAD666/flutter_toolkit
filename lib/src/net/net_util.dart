@@ -90,7 +90,7 @@ class NetUtil {
     int? sendTimeout,
     int? receiveTimeout,
     List<Interceptor>? interceptors,
-    bool proxyEnable = true,
+    bool proxyEnable = false,
     String proxyIp = '192.168.2.237',
     String proxyPort = '8888',
   }) {
@@ -224,6 +224,13 @@ class NetUtil {
   /// 设置headers
   void setHeaders(Map<String, dynamic> map) {
     dio.options.headers.addAll(map);
+
+  }
+
+  /// 移除header
+  void removeHeader(String? key) {
+    dio.options.headers.remove(key);
+
   }
 
   /// 取消请求
