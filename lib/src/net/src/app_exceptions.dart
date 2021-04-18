@@ -5,7 +5,7 @@ class AppException implements Exception {
   final String? message;
   final int? code;
 
-  AppException([
+   AppException([
     this.code,
     this.message,
   ]);

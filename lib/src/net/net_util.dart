@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
-import 'src/interceptor/error_interceptor.dart';
+import 'src/error_interceptor.dart';
 import 'src/net_configs.dart';
 
 enum HttpMethod {
@@ -219,6 +219,11 @@ class NetUtil {
       onReceiveProgress: onReceiveProgress,
     );
     return response.data;
+  }
+
+  /// 添加添加拦截器
+  void addInterceptor(Interceptor interceptor) {
+    dio.interceptors.add(interceptor);
   }
 
   /// 设置headers
