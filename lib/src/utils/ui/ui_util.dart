@@ -62,7 +62,7 @@ class UiUtil {
       .._orientation = orientation;
 
     if (orientation == Orientation.portrait) {
-      instance!._screenWidth = screenSize.width;
+      instance._screenWidth = screenSize.width;
       instance._screenHeight = screenSize.height;
     } else {
       instance._screenWidth = screenSize.height;
