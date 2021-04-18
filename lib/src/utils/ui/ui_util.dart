@@ -4,8 +4,11 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class UiUtil {
-  static const Size defaultSize = Size(360, 690);
-  static late UiUtil _instance;
+  static const Size _defaultSize = Size(360, 690);
+
+  static UiUtil? _instance;
+
+  static UiUtil get instance => UiUtil();
 
   /// UI设计中手机尺寸
   late Size uiSize;
@@ -26,33 +29,51 @@ class UiUtil {
   UiUtil._();
 
   factory UiUtil() {
-    return _instance;
+    if (_instance == null) {
+      _instance = UiUtil._();
+    }
+
+    return _instance!;
   }
 
   static void init({
     required Size screenSize,
-    Size designSize = defaultSize,
+    Size designSize  = _defaultSize,
     Orientation orientation = Orientation.portrait,
     bool allowFontScaling = false,
   }) {
-    _instance = UiUtil._()
+    instance._init(
+      screenSize: screenSize,
+      designSize: designSize,
+      orientation: orientation,
+      allowFontScaling: allowFontScaling,
+    );
+  }
+
+  void _init({
+    required Size screenSize,
+    required Size designSize,
+    Orientation orientation = Orientation.portrait,
+    bool allowFontScaling = false,
+  }) {
+    instance
       ..uiSize = designSize
       ..allowFontScaling = allowFontScaling
       .._orientation = orientation;
 
     if (orientation == Orientation.portrait) {
-      _instance._screenWidth = screenSize.width;
-      _instance._screenHeight = screenSize.height;
+      instance!._screenWidth = screenSize.width;
+      instance._screenHeight = screenSize.height;
     } else {
-      _instance._screenWidth = screenSize.height;
-      _instance._screenHeight = screenSize.width;
+      instance._screenWidth = screenSize.height;
+      instance._screenHeight = screenSize.width;
     }
 
     var window = WidgetsBinding.instance?.window ?? ui.window;
-    _instance._pixelRatio = window.devicePixelRatio;
-    _instance._statusBarHeight = window.padding.top;
-    _instance._bottomBarHeight = window.padding.bottom;
-    _instance._textScaleFactor = window.textScaleFactor;
+    instance._pixelRatio = window.devicePixelRatio;
+    instance._statusBarHeight = window.padding.top;
+    instance._bottomBarHeight = window.padding.bottom;
+    instance._textScaleFactor = window.textScaleFactor;
   }
 
   ///获取屏幕方向
