@@ -11,39 +11,47 @@ class UiUtil {
   static UiUtil get instance => UiUtil();
 
   /// UI设计中手机尺寸
-  late Size uiSize;
+  late Size _uiSize;
 
   /// 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放。默认值为false。
-  late bool allowFontScaling;
+  late bool _allowFontScaling;
 
   ///屏幕方向
   late Orientation _orientation;
 
   late double _pixelRatio;
   late double _textScaleFactor;
-  late double _screenWidth;
-  late double _screenHeight;
   late double _statusBarHeight;
   late double _bottomBarHeight;
 
-  UiUtil._();
+  double? _screenWidth;
+  double? _screenHeight;
 
   factory UiUtil() {
     if (_instance == null) {
-      _instance = UiUtil._();
+      _instance = UiUtil._internal();
     }
-
     return _instance!;
   }
 
+  UiUtil._internal() {
+    var window = WidgetsBinding.instance?.window ?? ui.window;
+    _pixelRatio = window.devicePixelRatio;
+    _statusBarHeight = window.padding.top;
+    _bottomBarHeight = window.padding.bottom;
+    _textScaleFactor = window.textScaleFactor;
+    _allowFontScaling = false;
+    _uiSize = _defaultSize;
+  }
+
   static void init({
-    required Size screenSize,
-    Size designSize  = _defaultSize,
+    required BuildContext context,
+    Size designSize = _defaultSize,
     Orientation orientation = Orientation.portrait,
     bool allowFontScaling = false,
   }) {
     instance._init(
-      screenSize: screenSize,
+      context: context,
       designSize: designSize,
       orientation: orientation,
       allowFontScaling: allowFontScaling,
@@ -51,29 +59,22 @@ class UiUtil {
   }
 
   void _init({
-    required Size screenSize,
+    required BuildContext context,
     required Size designSize,
     Orientation orientation = Orientation.portrait,
     bool allowFontScaling = false,
   }) {
-    instance
-      ..uiSize = designSize
-      ..allowFontScaling = allowFontScaling
-      .._orientation = orientation;
+    this._uiSize = designSize;
+    this._allowFontScaling = allowFontScaling;
+    this._orientation = orientation;
 
     if (orientation == Orientation.portrait) {
-      instance._screenWidth = screenSize.width;
-      instance._screenHeight = screenSize.height;
+      this._screenWidth = MediaQuery.of(context).size.width;
+      this._screenHeight = MediaQuery.of(context).size.height;
     } else {
-      instance._screenWidth = screenSize.height;
-      instance._screenHeight = screenSize.width;
+      this._screenWidth = MediaQuery.of(context).size.height;
+      this._screenHeight = MediaQuery.of(context).size.width;
     }
-
-    var window = WidgetsBinding.instance?.window ?? ui.window;
-    instance._pixelRatio = window.devicePixelRatio;
-    instance._statusBarHeight = window.padding.top;
-    instance._bottomBarHeight = window.padding.bottom;
-    instance._textScaleFactor = window.textScaleFactor;
   }
 
   ///获取屏幕方向
@@ -86,10 +87,10 @@ class UiUtil {
   double get pixelRatio => _pixelRatio;
 
   /// 当前设备宽度 dp
-  double get screenWidth => _screenWidth;
+  double get screenWidth => _screenWidth ?? _defaultSize.width;
 
   ///当前设备高度 dp
-  double get screenHeight => _screenHeight;
+  double get screenHeight => _screenHeight ?? _defaultSize.height;
 
   /// 状态栏高度 dp 刘海屏会更高
   double get statusBarHeight => _statusBarHeight / _pixelRatio;
@@ -98,9 +99,9 @@ class UiUtil {
   double get bottomBarHeight => _bottomBarHeight / _pixelRatio;
 
   /// 实际尺寸与UI设计的比例
-  double get scaleWidth => _screenWidth / uiSize.width;
+  double get scaleWidth => (_screenWidth ?? _uiSize.width) / _uiSize.width;
 
-  double get scaleHeight => _screenHeight / uiSize.height;
+  double get scaleHeight => (_screenWidth ?? _uiSize.height) / _uiSize.height;
 
   double get scaleText => min(scaleWidth, scaleHeight);
 
@@ -117,7 +118,7 @@ class UiUtil {
   ///字体大小适配方法
   double setSp(num fontSize, {bool? allowFontScalingSelf}) =>
       allowFontScalingSelf == null
-          ? (allowFontScaling
+          ? (_allowFontScaling
               ? (fontSize * scaleText) * _textScaleFactor
               : (fontSize * scaleText))
           : (allowFontScalingSelf
