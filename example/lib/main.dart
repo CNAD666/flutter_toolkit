@@ -35,8 +35,8 @@ void test() async {
     '222': '3333',
   });
   var result = await NetUtil.instance.get(
-    // 'https://www.wanandroid.com/banner/json',
-    'https://api.ixiaowai.cn/api/api.php?return=json',
+    'https://www.wanandroid.com/banner/json',
+    // 'https://api.ixiaowai.cn/api/api.php?return=json',
   );
 
   Log.i('1111111111111');

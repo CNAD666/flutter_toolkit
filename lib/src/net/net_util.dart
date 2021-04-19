@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_toolkit_easy/flutter_toolkit.dart';
 
 import 'src/error_interceptor.dart';
 import 'src/net_configs.dart';
@@ -188,7 +187,7 @@ class NetUtil {
   }
 
   /// Request 操作
-  Future? request<T>(
+  Future request<T>(
     String path, {
     required HttpMethod method,
     data,
@@ -210,9 +209,8 @@ class NetUtil {
     }
     //处理请求设置
     options = options ?? Options();
-
     Completer<T> completer = Completer();
-    await dio
+    dio
         .request<T>(
           path,
           data: data,
@@ -226,13 +224,16 @@ class NetUtil {
               completer.complete(value.data),
             })
         .catchError((error) => {
-              Log.i(error),
               completer.complete(null),
+              completer.completeError(error),
             })
-        .whenComplete(() => {
-              Log.i('0000000000'),
-            });
-    Log.i('22222222222');
+        .whenComplete(() => null);
+
+    //防止某些异常，没触发上面回调的保险措施
+    Future.delayed(
+      Duration(milliseconds: NetConfig.connectTimeout),
+      () => {if (!completer.isCompleted) completer.complete(null)},
+    );
 
     return completer.future;
   }
