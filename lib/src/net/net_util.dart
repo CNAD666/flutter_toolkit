@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_toolkit_easy/flutter_toolkit.dart';
 
 import 'src/error_interceptor.dart';
 import 'src/net_configs.dart';
@@ -112,13 +114,13 @@ class NetUtil {
   }
 
   /// Get 操作
-  Future get(
+  Future get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    var response = await request(
+    var response = await request<T>(
       path,
       method: HttpMethod.get,
       queryParameters: queryParameters,
@@ -129,14 +131,14 @@ class NetUtil {
   }
 
   /// Post 操作
-  Future post(
+  Future post<T>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    var response = await request(
+    var response = await request<T>(
       path,
       method: HttpMethod.post,
       data: data,
@@ -148,14 +150,14 @@ class NetUtil {
   }
 
   /// Put 操作
-  Future put(
+  Future put<T>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    var response = await request(
+    var response = await request<T>(
       path,
       method: HttpMethod.put,
       data: data,
@@ -167,14 +169,14 @@ class NetUtil {
   }
 
   /// delete 操作
-  Future delete(
+  Future delete<T>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    var response = await request(
+    var response = await request<T>(
       path,
       method: HttpMethod.delete,
       data: data,
@@ -186,7 +188,7 @@ class NetUtil {
   }
 
   /// Request 操作
-  Future request(
+  Future? request<T>(
     String path, {
     required HttpMethod method,
     data,
@@ -209,16 +211,28 @@ class NetUtil {
     //处理请求设置
     options = options ?? Options();
 
-    var response = await dio.request(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-      cancelToken: cancelToken ?? _cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-    return response.data;
+    Completer<T> completer = Completer();
+    await dio
+        .request<T>(
+          path,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken ?? _cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        )
+        .then((value) => {
+              completer.complete(value.data),
+            })
+        .catchError((error) => {
+              Log.i(error),
+              completer.complete(null),
+            })
+        .whenComplete(() => {Log.i('0000000000')});
+    Log.i('22222222222');
+
+    return completer.future;
   }
 
   /// 添加添加拦截器
@@ -229,13 +243,11 @@ class NetUtil {
   /// 设置headers
   void setHeaders(Map<String, dynamic> map) {
     dio.options.headers.addAll(map);
-
   }
 
   /// 移除header
   void removeHeader(String? key) {
     dio.options.headers.remove(key);
-
   }
 
   /// 取消请求

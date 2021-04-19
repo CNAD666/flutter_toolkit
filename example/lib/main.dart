@@ -31,12 +31,14 @@ void test() async {
   Log.d('测试Http');
 
   NetUtil.instance.setHeaders({
-    '111':'2222',
-    '222':'3333',
+    '111': '2222',
+    '222': '3333',
   });
   var result = await NetUtil.instance.get(
-    'https://www.wanandroid.com/banner/json',
+    // 'https://www.wanandroid.com/banner/json',
+    'https://api.ixiaowai.cn/api/api.php?return=json',
   );
 
+  Log.i('1111111111111');
   Log.i(result);
 }
