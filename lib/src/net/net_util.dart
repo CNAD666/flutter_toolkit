@@ -229,7 +229,9 @@ class NetUtil {
               Log.i(error),
               completer.complete(null),
             })
-        .whenComplete(() => {Log.i('0000000000')});
+        .whenComplete(() => {
+              Log.i('0000000000'),
+            });
     Log.i('22222222222');
 
     return completer.future;
