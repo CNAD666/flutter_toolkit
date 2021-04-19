@@ -113,7 +113,7 @@ class NetUtil {
   }
 
   /// Get 操作
-  Future get<T>(
+  Future<T> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
@@ -130,7 +130,7 @@ class NetUtil {
   }
 
   /// Post 操作
-  Future post<T>(
+  Future<T> post<T>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -149,7 +149,7 @@ class NetUtil {
   }
 
   /// Put 操作
-  Future put<T>(
+  Future<T> put<T>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -168,7 +168,7 @@ class NetUtil {
   }
 
   /// delete 操作
-  Future delete<T>(
+  Future<T> delete<T>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -187,7 +187,7 @@ class NetUtil {
   }
 
   /// Request 操作
-  Future request<T>(
+  Future<T> request<T>(
     String path, {
     required HttpMethod method,
     data,
