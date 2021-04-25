@@ -54,11 +54,9 @@ class NetUtil {
       // contentType: NetConfig.contentTypeForm,
     );
 
-    // 添加拦截器
+    // 添加异常拦截器
     dio.interceptors.add(ErrorInterceptor());
-    // 加内存缓存 暂时不需要本地缓存
-    // dio.interceptors.add(NetCacheInterceptor());
-
+    // 添加日志拦截器
     dio.interceptors.add(LogInterceptor());
 
     // 在调试模式下需要抓包调试，所以我们使用代理，并禁用HTTPS证书校验
@@ -229,18 +227,17 @@ class NetUtil {
             })
         .whenComplete(() => null);
 
-    //防止某些异常，没触发上面回调的保险措施
-    Future.delayed(
-      Duration(milliseconds: NetConfig.connectTimeout),
-      () => {if (!completer.isCompleted) completer.complete(null)},
-    );
-
     return completer.future;
   }
 
-  /// 添加添加拦截器
+  /// 添加拦截器
   void addInterceptor(Interceptor interceptor) {
     dio.interceptors.add(interceptor);
+  }
+
+  /// 移除拦截器
+  void removeIntercept(Interceptor interceptor) {
+    dio.interceptors.remove(interceptor);
   }
 
   /// 设置headers
