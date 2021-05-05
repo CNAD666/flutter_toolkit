@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
-import 'src/error_interceptor.dart';
-import 'src/net_configs.dart';
+import 'error_interceptor.dart';
+import 'net_configs.dart';
 
 enum HttpMethod {
   /// Get.
