@@ -4,11 +4,13 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class UiUtil {
-  static const Size _defaultSize = Size(360, 690);
+  factory UiUtil() => instance;
 
   static UiUtil? _instance;
 
-  static UiUtil get instance => UiUtil();
+  static UiUtil get instance => _instance ??= UiUtil._internal();
+
+  static const Size _defaultSize = Size(360, 690);
 
   /// UI设计中手机尺寸
   late Size _uiSize;
@@ -26,13 +28,6 @@ class UiUtil {
 
   double? _screenWidth;
   double? _screenHeight;
-
-  factory UiUtil() {
-    if (_instance == null) {
-      _instance = UiUtil._internal();
-    }
-    return _instance!;
-  }
 
   UiUtil._internal() {
     var window = WidgetsBinding.instance?.window ?? ui.window;
