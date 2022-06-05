@@ -1,9 +1,10 @@
 name: flutter_toolkit_easy
 description: flutter use toolkit
-version: 0.2.5
+version: 0.3.0
 author: xdd666
 homepage: https://github.com/CNAD666
-publish_to: https://pub.dartlang.org
+#publish_to: https://pub.dartlang.org
+#flutter pub publish --server=https://pub.dartlang.org
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

@@ -30,7 +30,7 @@ class UiUtil {
   double? _screenHeight;
 
   UiUtil._internal() {
-    var window = WidgetsBinding.instance?.window ?? ui.window;
+    var window = WidgetsBinding.instance.window;
     _pixelRatio = window.devicePixelRatio;
     _statusBarHeight = window.padding.top;
     _bottomBarHeight = window.padding.bottom;
